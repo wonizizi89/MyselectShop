@@ -1,6 +1,5 @@
 package com.sparta.myselectshop.controller;
 
-
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -12,6 +11,8 @@ public class ShopController {
 
     @GetMapping("/shop")
     public ModelAndView shop() {
-        return new ModelAndView("index");
+        ModelAndView modelAndView = new ModelAndView("index");
+        modelAndView.addObject("username","");
+        return modelAndView;
     }
 }
