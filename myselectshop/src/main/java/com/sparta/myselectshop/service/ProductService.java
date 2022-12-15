@@ -24,16 +24,9 @@ import java.util.List;
 public class ProductService {
 
     private final ProductRepository productRepository;
+    private final UserRepository userRepository;
     private final JwtUtil jwtUtil;
-    private final UserRepository userRepository; //유저 조회를 위함 DI
 
-//    @Transactional
-//    public ProductResponseDto createProduct(ProductRequestDto requestDto) {
-//        // 요청받은 DTO 로 DB에 저장할 객체 만들기
-//        Product product = productRepository.saveAndFlush(new Product(requestDto));
-//
-//        return new ProductResponseDto(product);
-//    }
     @Transactional
     public ProductResponseDto createProduct(ProductRequestDto requestDto, HttpServletRequest request) {
         // Request에서 Token 가져오기
@@ -63,27 +56,14 @@ public class ProductService {
         }
     }
 
-
-//    @Transactional(readOnly = true)
-//    public List<ProductResponseDto> getProducts() {
-//
-//        List<ProductResponseDto> list = new ArrayList<>();
-//
-//        List<Product> productList = productRepository.findAll();
-//        for (Product product : productList) {
-//            list.add(new ProductResponseDto(product));
-//        }
-//
-//        return list;
-//    }
     @Transactional(readOnly = true)
     public List<ProductResponseDto> getProducts(HttpServletRequest request) {
         // Request에서 Token 가져오기
         String token = jwtUtil.resolveToken(request);
-        Claims claims; //jwt 안에 들어 있는 정보를 담을 수 있는 객체
+        Claims claims;
 
         // 토큰이 있는 경우에만 관심상품 조회 가능
-        if(token != null) {
+        if (token != null) {
             // Token 검증
             if (jwtUtil.validateToken(token)) {
                 // 토큰에서 사용자 정보 가져오기
@@ -117,22 +97,10 @@ public class ProductService {
 
             return list;
 
-        }else {
+        } else {
             return null;
         }
     }
-
-//    @Transactional
-//    public Long updateProduct(Long id, ProductMypriceRequestDto requestDto) {
-//
-//        Product product = productRepository.findById(id).orElseThrow(
-//                () -> new NullPointerException("해당 상품은 존재하지 않습니다.")
-//        );
-//
-//        product.update(requestDto);
-//
-//        return product.getId();
-//    }
 
     @Transactional
     public Long updateProduct(Long id, ProductMypriceRequestDto requestDto, HttpServletRequest request) {
@@ -169,10 +137,11 @@ public class ProductService {
     }
 
     @Transactional
-    public void updateBySearch(Long id, ItemDto itemDto) {
+    public void updateBySearch (Long id, ItemDto itemDto){
         Product product = productRepository.findById(id).orElseThrow(
                 () -> new NullPointerException("해당 상품은 존재하지 않습니다.")
         );
         product.updateByItemDto(itemDto);
     }
+
 }
