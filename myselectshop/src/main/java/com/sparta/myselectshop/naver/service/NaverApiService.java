@@ -1,4 +1,3 @@
-
 package com.sparta.myselectshop.naver.service;
 
 import com.sparta.myselectshop.naver.dto.ItemDto;
@@ -24,7 +23,7 @@ public class NaverApiService {
         String body = "";
 
         HttpEntity<String> requestEntity = new HttpEntity<String>(body, headers);
-        ResponseEntity<String> responseEntity = rest.exchange("https://openapi.naver.com/v1/search/shop.json?display=15&query=" + query, HttpMethod.GET, requestEntity, String.class);
+        ResponseEntity<String> responseEntity = rest.exchange("https://openapi.naver.com/v1/search/shop.json?display=15&query=" + query , HttpMethod.GET, requestEntity, String.class);
 
         HttpStatus httpStatus = responseEntity.getStatusCode();
         int status = httpStatus.value();
@@ -38,10 +37,10 @@ public class NaverApiService {
     public List<ItemDto> fromJSONtoItems(String response) {
 
         JSONObject rjson = new JSONObject(response);
-        JSONArray items = rjson.getJSONArray("items");
+        JSONArray items  = rjson.getJSONArray("items");
         List<ItemDto> itemDtoList = new ArrayList<>();
 
-        for (int i = 0; i < items.length(); i++) {
+        for (int i=0; i<items.length(); i++) {
             JSONObject itemJson = items.getJSONObject(i);
             ItemDto itemDto = new ItemDto(itemJson);
             itemDtoList.add(itemDto);
@@ -49,6 +48,7 @@ public class NaverApiService {
 
         return itemDtoList;
     }
+
 
 
 }

@@ -8,6 +8,7 @@ import lombok.NoArgsConstructor;
 @Getter
 @NoArgsConstructor
 @AllArgsConstructor
+
 public class ProductRequestDto {
     // 관심상품명
     private String title;
