@@ -35,6 +35,7 @@ public class FolderController {
         System.out.println("======================================================");
 
         return folderService.addFolders(folderNames, userDetails.getUsername());
+
     }
 
     // 회원이 등록한 모든 폴더 조회
@@ -57,7 +58,7 @@ public class FolderController {
     ) {
         return folderService.getProductsInFolder(
                 folderId,
-                page-1,
+                page - 1,
                 size,
                 sortBy,
                 isAsc,
