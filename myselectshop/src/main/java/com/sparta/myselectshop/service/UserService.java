@@ -28,7 +28,7 @@ public class UserService {
     @Transactional
     public void signup(SignupRequestDto signupRequestDto) {
         String username = signupRequestDto.getUsername();
-        String password = passwordEncoder.encode(signupRequestDto.getPassword());// 패스워드 암호화
+        String password = passwordEncoder.encode(signupRequestDto.getPassword());
 
         // 회원 중복 확인
         Optional<User> found = userRepository.findByUsername(username);

@@ -1,8 +1,11 @@
 package com.sparta.myselectshop.controller;
 
+import com.fasterxml.jackson.core.JsonProcessingException;
 import com.sparta.myselectshop.dto.LoginRequestDto;
 import com.sparta.myselectshop.dto.SignupRequestDto;
+import com.sparta.myselectshop.jwt.JwtUtil;
 import com.sparta.myselectshop.security.UserDetailsImpl;
+import com.sparta.myselectshop.service.KakaoService;
 import com.sparta.myselectshop.service.UserService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
@@ -10,6 +13,7 @@ import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.ModelAndView;
 
+import javax.servlet.http.Cookie;
 import javax.servlet.http.HttpServletResponse;
 
 @Controller
@@ -18,13 +22,14 @@ import javax.servlet.http.HttpServletResponse;
 public class UserController {
 
     private final UserService userService;
+    private final KakaoService kakaoService;
 
     @GetMapping("/signup")
     public ModelAndView signupPage() {
         return new ModelAndView("signup");
     }
 
-    @GetMapping("/login-page")
+    @GetMapping("/login-page") //스프링 시큐리티에서 로긴을 사용하고 있으므로 login-page로변경함
     public ModelAndView loginPage() {
         return new ModelAndView("login");
     }
@@ -57,6 +62,19 @@ public class UserController {
     @ResponseBody
     public String getUserName(@AuthenticationPrincipal UserDetailsImpl userDetails) {
         return userDetails.getUsername();
+    }
+
+    @GetMapping("/kakao/callback")
+    public String kakaoLogin(@RequestParam String code, HttpServletResponse response) throws JsonProcessingException {
+        // code: 카카오 서버로부터 받은 인가 코드
+        String createToken = kakaoService.kakaoLogin(code, response);
+
+        // Cookie 생성 및 직접 브라우저에 Set
+        Cookie cookie = new Cookie(JwtUtil.AUTHORIZATION_HEADER, createToken.substring(7)); //쿠키객체를 만들때 공백 값이 있으면 오류발생
+        cookie.setPath("/");
+        response.addCookie(cookie);
+
+        return "redirect:/api/shop"; //자동으로 쿠키저장소에 저장이됨
     }
 
 }

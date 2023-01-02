@@ -30,7 +30,6 @@ public class JwtUtil {
     public static final String AUTHORIZATION_KEY = "auth";
     private static final String BEARER_PREFIX = "Bearer ";
     private static final long TOKEN_TIME = 60 * 60 * 1000L;
-
     private final UserDetailsServiceImpl userDetailsService;
 
     @Value("${jwt.secret.key}")
@@ -94,10 +93,8 @@ public class JwtUtil {
 
 
     // 인증 객체 생성
-    // 객체생성을 서비스에서 하지 않은 이유는 코드가독성을 높이기 위해 책임 분리한것으로 서비스에서 해도 무방
     public Authentication createAuthentication(String username) {
         UserDetails userDetails = userDetailsService.loadUserByUsername(username);
         return new UsernamePasswordAuthenticationToken(userDetails, null, userDetails.getAuthorities());
     }
-
 }
