@@ -27,15 +27,7 @@ public class FolderController {
 
         List<String> folderNames = folderRequestDto.getFolderNames();
 
-        System.out.println("======================================================");
-        System.out.println("user.getUsername() = " + userDetails.getUsername());
-        System.out.println("user.getUser() = " + userDetails.getUser());
-        System.out.println("user.getUser().getPassword() = " + userDetails.getUser().getPassword());
-        System.out.println("user.getUser().getId() = " + userDetails.getUser().getId());
-        System.out.println("======================================================");
-
         return folderService.addFolders(folderNames, userDetails.getUsername());
-
     }
 
     // 회원이 등록한 모든 폴더 조회
@@ -58,11 +50,12 @@ public class FolderController {
     ) {
         return folderService.getProductsInFolder(
                 folderId,
-                page - 1,
+                page-1,
                 size,
                 sortBy,
                 isAsc,
                 userDetails.getUser()
         );
     }
+
 }
